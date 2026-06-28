@@ -43,10 +43,13 @@ model User {
   // --- Perks (private, derived; persisted when unlocked) ---
   perkFreeYearGranted Boolean @default(false)
 
+  downloadReleasedAt DateTime? // admin unlocks the desktop download for this user
+
   // --- GDPR soft-delete ---
   deletedAt DateTime?
 
   feedback    Feedback[]
+  votes       FeedbackVote[]
   magicTokens MagicLinkToken[]
 
   @@index([priorityBoost(sort: Desc), createdAt(sort: Asc)])
@@ -73,13 +76,18 @@ model Feedback {
   user       User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
   body       String
   tag        FeedbackTag
-  anonymized Boolean        @default(false)
-  status     FeedbackStatus @default(NEW)
-  createdAt  DateTime       @default(now())
+  anonymized  Boolean        @default(false)
+  status      FeedbackStatus @default(NEW)
+  public      Boolean        @default(false) // admin-promoted to the community board
+  publicTitle String? // clean public label set by admin on promotion
+  promotedAt  DateTime?
+  votes       FeedbackVote[]
+  createdAt   DateTime       @default(now())
 
   @@index([tag])
   @@index([status])
   @@index([createdAt])
+  @@index([public])
 }
 
 enum FeedbackTag {
@@ -92,4 +100,36 @@ enum FeedbackStatus {
   NEW
   REVIEWED
   HIDDEN
+}
+
+model FeedbackVote {
+  id         String   @id @default(cuid())
+  feedbackId String
+  feedback   Feedback @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([feedbackId, userId])
+  @@index([feedbackId])
+}
+
+model Release {
+  id        String   @id @default(cuid())
+  version   String
+  fileName  String
+  blobUrl   String
+  sizeBytes Int?
+  sha256    String?
+  notes     String?
+  isCurrent Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@index([isCurrent])
+}
+
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
 }

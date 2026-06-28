@@ -7,7 +7,7 @@ import { jwtVerify } from "jose";
 const SESSION_COOKIE = "hm_session";
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/account/:path*", "/admin/:path*"],
+  matcher: ["/dashboard/:path*", "/account/:path*", "/admin/:path*", "/community/:path*"],
 };
 
 async function readClaims(req: NextRequest): Promise<{ isAdmin: boolean } | null> {
