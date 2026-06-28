@@ -1,0 +1,15 @@
+{
+  "certificate": {
+    "version": "humanlit-cert-1",
+    "disclosure": "validity-only",
+    "id": "11111111-2222-3333-4444-555555555555",
+    "issued_at": "2026-05-31T11:00:00+00:00",
+    "issuer_pubkey": "ea4a6c63e29c520abef5507b132ec5f9954776aebebe7b92421eea691446d22c",
+    "granted_tier": "no-bulk-paste",
+    "verdict": "eligible-with-disclosures",
+    "final_text_sha256": "b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9",
+    "integrity": "signed-local"
+  },
+  "algorithm": "ed25519",
+  "signature": "6262e9d22f83be6d87e06f57271f01e0fdd59ee721fa1ae587129ff1deb9f12a33b84fba46c4c1f4eaf8d00db95445d0a10ed463f14e263b1644180f8613df04"
+}

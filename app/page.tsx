@@ -1,65 +1,75 @@
-import Image from "next/image";
+import { SiteHeader, SiteFooter } from "@/components/Chrome";
+import { SignupForm } from "@/components/landing/SignupForm";
 
-export default function Home() {
+export default async function LandingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ ref?: string }>;
+}) {
+  const { ref } = await searchParams;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <>
+      <SiteHeader />
+      <main className="wrap">
+        <section className="hero">
+          <div className="hero-grid">
+            <div>
+              <p className="kicker">Authorship, certified by process</p>
+              <h1>Prove how your work was written.</h1>
+              <p className="lede">
+                A privacy-preserving authorship certificate for writers. Capture the process behind a
+                piece as you write it, then hand skeptics a certificate they can verify themselves —
+                without ever exposing your drafts.
+              </p>
+              <p className="muted small">
+                Built for journalists first. Your raw text stays on your device. This is not an AI
+                detector — it attests to what was observed while you wrote, and is honest about its
+                limits.
+              </p>
+            </div>
+            <div>
+              <p className="kicker" style={{ marginBottom: 10 }}>
+                Request beta access
+              </p>
+              <SignupForm referralCode={ref} />
+            </div>
+          </div>
+        </section>
+
+        <hr className="rule" />
+
+        <section>
+          <p className="kicker">How a certificate earns trust</p>
+          <div className="card-grid">
+            <div className="panel card">
+              <p className="num">01 — Capture</p>
+              <h3>Write in your own tools</h3>
+              <p className="muted small">
+                The desktop app observes the writing process — typing, edits, pastes, dictation —
+                without storing your raw text.
+              </p>
+            </div>
+            <div className="panel card">
+              <p className="num">02 — Certify</p>
+              <h3>Bind proof to the final text</h3>
+              <p className="muted small">
+                A certificate states what was observed, the policy tier earned, and exactly what it
+                does and does not prove.
+              </p>
+            </div>
+            <div className="panel card">
+              <p className="num">03 — Verify</p>
+              <h3>Skeptics check it themselves</h3>
+              <p className="muted small">
+                Anyone can verify a certificate offline — signature, registration, and text match —
+                without trusting you or seeing your drafts.
+              </p>
+            </div>
+          </div>
+        </section>
       </main>
-    </div>
+      <SiteFooter />
+    </>
   );
 }

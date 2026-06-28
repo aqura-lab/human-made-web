@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Human Made — Early-Access Platform
 
-## Getting Started
+The public beta launch surface for **Human Made**, a privacy-preserving authorship
+certificate for writers. This web app runs the early-access programme: a landing
+page, passwordless sign-in, a user dashboard (queue position, private referrals,
+and a **certificate verifier**), GDPR self-service, and a minimal admin portal.
 
-First, run the development server:
+> Human Made certifies **how a piece was written** (the observed writing process).
+> It is **not** an AI detector and does not claim to prove the absence of AI
+> assistance. The companion desktop capture app + offline verifier live in the
+> sibling `human-made` repo.
+
+## Stack
+
+- **Next.js 16** (App Router) + TypeScript
+- **Prisma 7** + PostgreSQL (Neon / Vercel Postgres in prod; a local PGlite dev DB via `prisma dev`)
+- Passwordless **magic-link** auth — JWT (`jose`) in an httpOnly cookie
+- Email via **Resend** (falls back to console + a dev outbox when unset)
+- **Jest + React Testing Library** (unit/component) and **Playwright** (E2E)
+- Deploys on **Vercel**
+
+The certificate verifier reuses the desktop project's offline verifier
+(`lib/verify/verify.ts`, vendored) — Ed25519 signature + registration hash-chain
++ text-hash binding, all checked in a stateless Node API route that persists and
+logs nothing.
+
+## Architecture notes
+
+Business rules live in **pure functions** (queue ranking, referral progress +
+guards, token/session helpers, GDPR transforms, consent validation) under `lib/`,
+unit-tested without a database. Prisma is a thin persistence layer; DB-backed
+flows are covered by Playwright E2E against a real server.
+
+- `app/` — routes & pages (landing, login, dashboard, account, admin, `api/*`)
+- `lib/` — domain logic, auth, verifier, db singleton, generated Prisma client
+- `proxy.ts` — edge auth gate for `/dashboard`, `/account`, `/admin`
+- `prisma/` — schema + migrations
+- `tests/` — `unit/`, `component/`, `e2e/`, `fixtures/`
+
+## Local development
 
 ```bash
+npm install
+
+# 1. Start the local Postgres (Prisma 7 ships a PGlite-backed dev server).
+#    Copy the printed DATABASE_URL into .env (see .env.example).
+npx prisma dev
+
+# 2. Sync the schema to the local DB (the PGlite dev DB supports db push).
+npm run db:push
+
+# 3. Run the app.
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+No `RESEND_API_KEY`? Magic links are printed to the server console and exposed
+in dev at `GET /api/dev/last-link?email=…` (disabled in production).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tests
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm test          # Jest unit + component
+npm run test:e2e  # Playwright end-to-end (starts the dev server)
+```
 
-## Learn More
+## Environment
 
-To learn more about Next.js, take a look at the following resources:
+See `.env.example`. Required in production: `DATABASE_URL`, `DIRECT_URL`,
+`JWT_SECRET`, `APP_URL`, `RESEND_API_KEY`, `EMAIL_FROM`, `ADMIN_EMAILS`,
+`CRON_SECRET` (plus optional `REFERRAL_GOAL`, `REFERRAL_BOOST_PER_CONVERSION`).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy (Vercel)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Provision a Postgres (Neon / Vercel Postgres); set `DATABASE_URL` (pooled) and
+  `DIRECT_URL` (direct).
+- Set all env vars in the Vercel project (Production + Preview).
+- The `vercel-build` script runs `prisma generate && prisma migrate deploy &&
+  next build`, so migrations apply on deploy.
+- A daily cron (`vercel.json`) calls `/api/cron/purge` to hard-delete
+  soft-deleted accounts after a 30-day grace period (auth via `CRON_SECRET`).

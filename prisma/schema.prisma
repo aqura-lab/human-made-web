@@ -1,0 +1,95 @@
+// Human Made — early-access platform data model.
+// Privacy-first: stores only signup + queue + referral + feedback metadata.
+// No raw draft text or keystroke data ever lives here (that stays on-device in
+// the desktop app); the certificate verifier is stateless and persists nothing.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id     String  @id @default(cuid())
+  email  String  @unique // stored lowercased
+  name   String
+  reason String? // "why you want early access" free text
+
+  // --- Consent (double opt-in / GDPR) ---
+  consentGdpr    Boolean   @default(false)
+  consentTerms   Boolean   @default(false)
+  consentPrivacy Boolean   @default(false)
+  consentAt      DateTime?
+  consentIp      String?
+  consentUA      String?
+
+  // --- Email verification (second opt-in) ---
+  emailVerified DateTime?
+
+  // --- Queue / priority ---
+  createdAt     DateTime @default(now()) // base FIFO ordering key
+  priorityBoost Int      @default(0) // sum of bumps from converted referrals
+  // effective queue order = (priorityBoost DESC, createdAt ASC)
+
+  // --- Referral (self-relation) ---
+  referralCode String  @unique
+  referredById String?
+  referredBy   User?   @relation("Referrals", fields: [referredById], references: [id], onDelete: SetNull)
+  referrals    User[]  @relation("Referrals")
+
+  // --- Perks (private, derived; persisted when unlocked) ---
+  perkFreeYearGranted Boolean @default(false)
+
+  // --- GDPR soft-delete ---
+  deletedAt DateTime?
+
+  feedback    Feedback[]
+  magicTokens MagicLinkToken[]
+
+  @@index([priorityBoost(sort: Desc), createdAt(sort: Asc)])
+  @@index([referredById])
+  @@index([emailVerified])
+}
+
+model MagicLinkToken {
+  id        String    @id @default(cuid())
+  tokenHash String    @unique // sha256(rawToken); raw token never stored
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  usedAt    DateTime? // single-use: set on first consume
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Feedback {
+  id         String         @id @default(cuid())
+  userId     String? // nullable so anonymized rows survive account deletion
+  user       User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+  body       String
+  tag        FeedbackTag
+  anonymized Boolean        @default(false)
+  status     FeedbackStatus @default(NEW)
+  createdAt  DateTime       @default(now())
+
+  @@index([tag])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum FeedbackTag {
+  UX
+  ETHICS
+  BUGS
+}
+
+enum FeedbackStatus {
+  NEW
+  REVIEWED
+  HIDDEN
+}

@@ -1,0 +1,28 @@
+---
+description: Practice test-driven development for all code changes
+alwaysApply: true
+---
+
+# Test-Driven Development (TDD)
+
+Write tests before implementation for every behavioral change.
+
+## Workflow (red → green → refactor)
+
+1. **Red**: Write a failing test that specifies the desired behavior. Run it and
+   confirm it fails for the expected reason.
+2. **Green**: Write the minimum code to make the test pass. Run the test.
+3. **Refactor**: Clean up while keeping tests green.
+
+## Rules
+
+- Add or update tests in the SAME change as the code they cover. Never ship
+  behavior without a test.
+- Unit + API-route tests run under Jest (node env); component tests opt into
+  jsdom via a `@jest-environment jsdom` docblock; flows are covered by Playwright
+  E2E in `tests/e2e/`.
+- Preserve the privacy invariant in tests too: never assert on or introduce raw
+  keystroke characters or raw draft text. The certificate verifier must never log
+  or echo pasted certificate/text content.
+- A task is not "done" until its tests run and pass; report the test command and
+  result.

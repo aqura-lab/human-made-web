@@ -1,0 +1,25 @@
+{
+  "certificate": {
+    "version": "humanlit-cert-1",
+    "disclosure": "summary",
+    "id": "11111111-2222-3333-4444-555555555555",
+    "issued_at": "2026-05-31T11:00:00+00:00",
+    "issuer_pubkey": "ea4a6c63e29c520abef5507b132ec5f9954776aebebe7b92421eea691446d22c",
+    "granted_tier": "no-bulk-paste",
+    "verdict": "eligible-with-disclosures",
+    "final_text_sha256": "b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9",
+    "integrity": "signed-local",
+    "state": "issuable-with-caveats",
+    "meaning": "Linked to an observed writing session with meaningful human input.",
+    "coverage_level": "strong",
+    "disclosures": [
+      "Observed typed volume covers ~73% of the final text length."
+    ],
+    "limitations": [
+      "Does not prove the absence of AI assistance.",
+      "Paste detection only catches Cmd/Ctrl+V."
+    ]
+  },
+  "algorithm": "ed25519",
+  "signature": "dd06befa07d65f0b96d17f216e2f917073d8b2dc413108d90b909ef338be7d9b46556c71a601fb5c9f6b4db4177b0c44d749f7f9c042337b50e455e206b62d0c"
+}
