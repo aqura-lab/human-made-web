@@ -27,13 +27,26 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid promotion request" }, { status: 400 });
   }
   const { id, public: isPublic, publicTitle } = parsed.data;
-  await prisma.feedback.update({
-    where: { id },
-    data: {
-      public: isPublic,
-      publicTitle: publicTitle ?? null,
-      promotedAt: isPublic ? new Date() : null,
-    },
-  });
+  if (isPublic && !publicTitle?.trim()) {
+    return NextResponse.json(
+      { error: "A public title is required to promote an idea." },
+      { status: 400 },
+    );
+  }
+  try {
+    await prisma.feedback.update({
+      where: { id },
+      data: {
+        public: isPublic,
+        publicTitle: isPublic ? (publicTitle ?? null) : null,
+        promotedAt: isPublic ? new Date() : null,
+      },
+    });
+  } catch (e) {
+    if ((e as { code?: string }).code === "P2025") {
+      return NextResponse.json({ error: "Feedback not found" }, { status: 404 });
+    }
+    throw e;
+  }
   return NextResponse.json({ ok: true });
 }

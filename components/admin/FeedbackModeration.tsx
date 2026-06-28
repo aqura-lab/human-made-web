@@ -62,13 +62,19 @@ export function FeedbackModeration({ items }: { items: Item[] }) {
             <input
               aria-label={`public title for ${r.id}`}
               placeholder="Public idea title"
-              defaultValue={r.publicTitle ?? ""}
-              onBlur={(e) => { r.publicTitle = e.target.value; }}
+              value={r.publicTitle ?? ""}
+              onChange={(e) => {
+                const val = e.target.value;
+                setRows((rs) =>
+                  rs.map((row) => (row.id === r.id ? { ...row, publicTitle: val } : row)),
+                );
+              }}
               style={{ flex: 1, padding: "6px 8px", border: "1px solid var(--rule)", borderRadius: 3 }}
             />
             <button
               className="btn"
               type="button"
+              disabled={!r.public && !r.publicTitle?.trim()}
               onClick={() => promote(r.id, !r.public, r.publicTitle ?? "")}
             >
               {r.public ? "Unpromote" : "Promote"}
