@@ -8,12 +8,18 @@ export function IdeaBoard({ initial }: { initial: PublicIdea[] }) {
 
   async function toggle(idea: PublicIdea) {
     const next = !idea.votedByMe;
+    const previous = ideas;
     setIdeas((xs) =>
       xs.map((i) =>
         i.id === idea.id ? { ...i, votedByMe: next, voteCount: i.voteCount + (next ? 1 : -1) } : i,
       ),
     );
-    await fetch(`/api/community/ideas/${idea.id}/vote`, { method: next ? "POST" : "DELETE" });
+    try {
+      const res = await fetch(`/api/community/ideas/${idea.id}/vote`, { method: next ? "POST" : "DELETE" });
+      if (!res.ok) setIdeas(previous);
+    } catch {
+      setIdeas(previous);
+    }
   }
 
   if (ideas.length === 0) return <p className="muted small">No community ideas yet — check back soon.</p>;
