@@ -9,12 +9,23 @@ type Item = {
   status: string;
   anonymized: boolean;
   createdAt: string;
+  public: boolean;
+  publicTitle: string | null;
 };
 
 const STATUSES = ["NEW", "REVIEWED", "HIDDEN"] as const;
 
 export function FeedbackModeration({ items }: { items: Item[] }) {
   const [rows, setRows] = useState(items);
+
+  async function promote(id: string, isPublic: boolean, publicTitle: string) {
+    setRows((rs) => rs.map((r) => (r.id === id ? { ...r, public: isPublic, publicTitle } : r)));
+    await fetch("/api/admin/feedback/promote", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ id, public: isPublic, publicTitle }),
+    });
+  }
 
   async function setStatus(id: string, status: string) {
     setRows((rs) => rs.map((r) => (r.id === id ? { ...r, status } : r)));
@@ -47,6 +58,22 @@ export function FeedbackModeration({ items }: { items: Item[] }) {
               ))}
             </select>
           </p>
+          <div style={{ display: "flex", gap: 8, marginTop: 8, alignItems: "center" }}>
+            <input
+              aria-label={`public title for ${r.id}`}
+              placeholder="Public idea title"
+              defaultValue={r.publicTitle ?? ""}
+              onBlur={(e) => { r.publicTitle = e.target.value; }}
+              style={{ flex: 1, padding: "6px 8px", border: "1px solid var(--rule)", borderRadius: 3 }}
+            />
+            <button
+              className="btn"
+              type="button"
+              onClick={() => promote(r.id, !r.public, r.publicTitle ?? "")}
+            >
+              {r.public ? "Unpromote" : "Promote"}
+            </button>
+          </div>
         </div>
       ))}
     </div>

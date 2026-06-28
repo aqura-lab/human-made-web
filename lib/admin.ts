@@ -50,6 +50,9 @@ export async function getAdminFeedback() {
   return prisma.feedback.findMany({
     orderBy: { createdAt: "desc" },
     take: 200,
-    select: { id: true, body: true, tag: true, status: true, anonymized: true, createdAt: true },
+    select: {
+      id: true, body: true, tag: true, status: true, anonymized: true, createdAt: true,
+      public: true, publicTitle: true,
+    },
   });
 }
