@@ -6,12 +6,16 @@ import { ReferralCard } from "@/components/dashboard/ReferralCard";
 import { CertificateVerifier } from "@/components/dashboard/CertificateVerifier";
 import { FeedbackForm } from "@/components/dashboard/FeedbackForm";
 import { DownloadCard } from "@/components/dashboard/DownloadCard";
+import { LoomEmbed } from "@/components/dashboard/LoomEmbed";
 import { getDownloadStateForUser } from "@/lib/release/store";
+import { getSetting } from "@/lib/settings/store";
+import { loomEmbedUrl, LOOM_SETTING_KEY } from "@/lib/settings/loom";
 
 export default async function DashboardPage() {
   const user = await requireUser();
   const data = await getDashboardData(user.id);
   const download = await getDownloadStateForUser(user.id);
+  const loom = loomEmbedUrl(await getSetting(LOOM_SETTING_KEY));
 
   return (
     <>
@@ -46,6 +50,8 @@ export default async function DashboardPage() {
             goal={data.goal}
             perkUnlocked={data.perkUnlocked}
           />
+
+          {loom && <LoomEmbed embedUrl={loom} />}
 
           <div className="panel span-2">
             <p className="kicker">Verify a certificate</p>

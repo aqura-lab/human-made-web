@@ -5,13 +5,16 @@ import { SiteFooter } from "@/components/Chrome";
 import { FeedbackModeration } from "@/components/admin/FeedbackModeration";
 import { ReleaseManager } from "@/components/admin/ReleaseManager";
 import { ReleaseToggle } from "@/components/admin/ReleaseToggle";
+import { LoomSetting } from "@/components/admin/LoomSetting";
 import { getCurrentRelease } from "@/lib/release/store";
+import { getSetting } from "@/lib/settings/store";
+import { LOOM_SETTING_KEY } from "@/lib/settings/loom";
 
 export const metadata = { title: "Admin — Human Made" };
 
 export default async function AdminPage() {
   await requireAdmin(); // server-side gate (defense in depth beyond middleware)
-  const [users, feedback, currentRelease] = await Promise.all([getAdminUsers(), getAdminFeedback(), getCurrentRelease()]);
+  const [users, feedback, currentRelease, loom] = await Promise.all([getAdminUsers(), getAdminFeedback(), getCurrentRelease(), getSetting(LOOM_SETTING_KEY)]);
 
   return (
     <>
@@ -23,6 +26,11 @@ export default async function AdminPage() {
         <div className="panel" style={{ marginTop: 16 }}>
           <h3>Release manager</h3>
           <ReleaseManager current={currentRelease ? { version: currentRelease.version, fileName: currentRelease.fileName } : null} />
+        </div>
+
+        <div className="panel" style={{ marginTop: 16 }}>
+          <h3>Dashboard explainer video</h3>
+          <LoomSetting current={loom} />
         </div>
 
         <div className="panel" style={{ marginTop: 16 }}>
