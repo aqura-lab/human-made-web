@@ -5,11 +5,13 @@ import { SiteFooter } from "@/components/Chrome";
 import { ReferralCard } from "@/components/dashboard/ReferralCard";
 import { CertificateVerifier } from "@/components/dashboard/CertificateVerifier";
 import { FeedbackForm } from "@/components/dashboard/FeedbackForm";
-import { DownloadLocked } from "@/components/dashboard/DownloadLocked";
+import { DownloadCard } from "@/components/dashboard/DownloadCard";
+import { getDownloadStateForUser } from "@/lib/release/store";
 
 export default async function DashboardPage() {
   const user = await requireUser();
   const data = await getDashboardData(user.id);
+  const download = await getDownloadStateForUser(user.id);
 
   return (
     <>
@@ -61,7 +63,7 @@ export default async function DashboardPage() {
             <FeedbackForm />
           </div>
 
-          <DownloadLocked />
+          <DownloadCard state={download} />
         </div>
       </main>
       <SiteFooter />

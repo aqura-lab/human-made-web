@@ -3,12 +3,15 @@ import { getAdminUsers, getAdminFeedback } from "@/lib/admin";
 import { AuthedHeader } from "@/components/dashboard/AuthedHeader";
 import { SiteFooter } from "@/components/Chrome";
 import { FeedbackModeration } from "@/components/admin/FeedbackModeration";
+import { ReleaseManager } from "@/components/admin/ReleaseManager";
+import { ReleaseToggle } from "@/components/admin/ReleaseToggle";
+import { getCurrentRelease } from "@/lib/release/store";
 
 export const metadata = { title: "Admin — Human Made" };
 
 export default async function AdminPage() {
   await requireAdmin(); // server-side gate (defense in depth beyond middleware)
-  const [users, feedback] = await Promise.all([getAdminUsers(), getAdminFeedback()]);
+  const [users, feedback, currentRelease] = await Promise.all([getAdminUsers(), getAdminFeedback(), getCurrentRelease()]);
 
   return (
     <>
@@ -16,6 +19,11 @@ export default async function AdminPage() {
       <main className="wrap" style={{ paddingTop: 40 }}>
         <p className="kicker">Admin</p>
         <h1>Early-access control</h1>
+
+        <div className="panel" style={{ marginTop: 16 }}>
+          <h3>Release manager</h3>
+          <ReleaseManager current={currentRelease ? { version: currentRelease.version, fileName: currentRelease.fileName } : null} />
+        </div>
 
         <div className="panel" style={{ marginTop: 16 }}>
           <h3>Waitlist · {users.length} signups</h3>
@@ -29,6 +37,7 @@ export default async function AdminPage() {
                   <th>Joined</th>
                   <th>Verified</th>
                   <th>Referrals</th>
+                  <th>Download</th>
                 </tr>
               </thead>
               <tbody>
@@ -40,6 +49,7 @@ export default async function AdminPage() {
                     <td>{u.joinedAt.toISOString().slice(0, 10)}</td>
                     <td>{u.verified ? "yes" : "—"}</td>
                     <td>{u.referralCount}</td>
+                    <td><ReleaseToggle id={u.id} released={u.downloadReleased} /></td>
                   </tr>
                 ))}
               </tbody>

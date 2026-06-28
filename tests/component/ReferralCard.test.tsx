@@ -3,7 +3,7 @@
  */
 import { render, screen } from "@testing-library/react";
 import { ReferralCard } from "@/components/dashboard/ReferralCard";
-import { DownloadLocked } from "@/components/dashboard/DownloadLocked";
+import { DownloadCard } from "@/components/dashboard/DownloadCard";
 
 describe("ReferralCard", () => {
   const link = "https://humanmade.app/?ref=abc123";
@@ -24,9 +24,9 @@ describe("ReferralCard", () => {
   });
 });
 
-describe("DownloadLocked", () => {
-  it("shows a coming-soon placeholder with no live download link", () => {
-    render(<DownloadLocked />);
+describe("DownloadCard", () => {
+  it("shows a coming-soon placeholder with no live download link when locked", () => {
+    render(<DownloadCard state={{ available: false, version: null, notes: null, sha256: null, url: null }} />);
     expect(screen.getByText(/coming soon/i)).toBeInTheDocument();
     const links = screen.queryAllByRole("link");
     expect(links).toHaveLength(0);
