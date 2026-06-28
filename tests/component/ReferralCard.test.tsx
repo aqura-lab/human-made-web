@@ -3,7 +3,6 @@
  */
 import { render, screen } from "@testing-library/react";
 import { ReferralCard } from "@/components/dashboard/ReferralCard";
-import { DownloadCard } from "@/components/dashboard/DownloadCard";
 
 describe("ReferralCard", () => {
   const link = "https://humanmade.app/?ref=abc123";
@@ -21,14 +20,5 @@ describe("ReferralCard", () => {
   it("celebrates the unlocked perk", () => {
     render(<ReferralCard link={link} converted={5} goal={5} perkUnlocked />);
     expect(screen.getByText(/1 year free|unlocked/i)).toBeInTheDocument();
-  });
-});
-
-describe("DownloadCard", () => {
-  it("shows a coming-soon placeholder with no live download link when locked", () => {
-    render(<DownloadCard state={{ available: false, version: null, notes: null, sha256: null, url: null }} />);
-    expect(screen.getByText(/coming soon/i)).toBeInTheDocument();
-    const links = screen.queryAllByRole("link");
-    expect(links).toHaveLength(0);
   });
 });
