@@ -1,7 +1,8 @@
 // Pure GDPR transforms. Soft-delete scrubs identifying fields and tombstones the
 // (unique) email so the row can stay for the grace period before a cron purge.
 // Feedback is anonymised separately (userId set null) so product insight survives
-// erasure of identity.
+// erasure of identity. Magic links and community votes (personal data) are deleted
+// explicitly in the transaction — FK cascade only fires on the hard purge cron.
 
 export function tombstoneEmail(userId: string): string {
   return `deleted+${userId}@deleted.invalid`;
