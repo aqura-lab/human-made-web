@@ -1,6 +1,6 @@
-import { isVotableIdea, toPublicIdea, byVoteCountDesc } from "@/lib/community/ideas";
+import { isVotableIdea, isPublishableIdea, toPublicIdea, byVoteCountDesc } from "@/lib/community/ideas";
 
-const base = { id: "f1", body: "raw private text", publicTitle: "Add dark mode", tag: "UX", public: true, status: "NEW" };
+const base = { id: "f1", publicTitle: "Add dark mode", tag: "UX", public: true, status: "NEW" };
 
 describe("isVotableIdea", () => {
   it("true only when public and not hidden", () => {
@@ -8,6 +8,19 @@ describe("isVotableIdea", () => {
     expect(isVotableIdea({ public: true, status: "REVIEWED" })).toBe(true);
     expect(isVotableIdea({ public: false, status: "NEW" })).toBe(false);
     expect(isVotableIdea({ public: true, status: "HIDDEN" })).toBe(false);
+  });
+});
+
+describe("isPublishableIdea", () => {
+  it("requires a clean admin-authored public title, never the raw body", () => {
+    // Defense-in-depth for the privacy invariant: an idea is only publishable to
+    // the board when it carries a non-empty publicTitle. The raw private body is
+    // never a source of the public label, so it can never leak to the board.
+    expect(isPublishableIdea(base)).toBe(true);
+    expect(isPublishableIdea({ ...base, publicTitle: null })).toBe(false);
+    expect(isPublishableIdea({ ...base, publicTitle: "   " })).toBe(false);
+    expect(isPublishableIdea({ ...base, status: "HIDDEN" })).toBe(false);
+    expect(isPublishableIdea({ ...base, public: false })).toBe(false);
   });
 });
 
@@ -19,10 +32,9 @@ describe("toPublicIdea", () => {
     expect(Object.keys(idea).sort()).toEqual(["id", "tag", "title", "voteCount", "votedByMe"]);
   });
 
-  it("falls back to a trimmed body snippet when no publicTitle", () => {
-    const longBody = "x".repeat(200);
-    const idea = toPublicIdea({ ...base, publicTitle: null, body: longBody }, 0, false);
-    expect(idea.title.length).toBeLessThanOrEqual(80);
+  it("derives the title only from publicTitle (no body input exists)", () => {
+    const idea = toPublicIdea({ ...base, publicTitle: "  Trimmed me  " }, 0, false);
+    expect(idea.title).toBe("Trimmed me");
   });
 });
 
