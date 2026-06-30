@@ -9,6 +9,7 @@ export type AdminUserRow = {
   verified: boolean;
   referralCount: number;
   position: number | null;
+  downloadReleased: boolean;
 };
 
 export async function getAdminUsers(): Promise<AdminUserRow[]> {
@@ -33,6 +34,7 @@ export async function getAdminUsers(): Promise<AdminUserRow[]> {
     joinedAt: u.createdAt,
     verified: u.emailVerified !== null,
     referralCount: u._count.referrals,
+    downloadReleased: u.downloadReleasedAt !== null,
     position: queuePosition(
       {
         id: u.id,
@@ -50,6 +52,9 @@ export async function getAdminFeedback() {
   return prisma.feedback.findMany({
     orderBy: { createdAt: "desc" },
     take: 200,
-    select: { id: true, body: true, tag: true, status: true, anonymized: true, createdAt: true },
+    select: {
+      id: true, body: true, tag: true, status: true, anonymized: true, createdAt: true,
+      public: true, publicTitle: true,
+    },
   });
 }

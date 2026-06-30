@@ -10,6 +10,7 @@ export function AuthedHeader({ isAdmin }: { isAdmin?: boolean }) {
         <nav className="nav">
           <Link href="/dashboard">Dashboard</Link>
           <Link href="/account">Account</Link>
+          <Link href="/community">Community</Link>
           {isAdmin && <Link href="/admin">Admin</Link>}
           <form action="/api/auth/logout" method="post" style={{ display: "inline" }}>
             <button
