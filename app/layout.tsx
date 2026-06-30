@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Anton, Courier_Prime } from "next/font/google";
 import "./globals.css";
 import { SelectionPaint } from "@/components/craft/SelectionPaint";
+import { CursorPaint } from "@/components/craft/CursorPaint";
 
 const display = Anton({
   variable: "--font-display",
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en" className={`${display.variable} ${typewriter.variable}`}>
       <body>
         <SelectionPaint />
+        <CursorPaint />
         {children}
       </body>
     </html>
