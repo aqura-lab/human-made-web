@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Anton, Courier_Prime } from "next/font/google";
 import "./globals.css";
+import { SelectionPaint } from "@/components/craft/SelectionPaint";
 
 const display = Anton({
   variable: "--font-display",
@@ -23,7 +24,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${display.variable} ${typewriter.variable}`}>
-      <body>{children}</body>
+      <body>
+        <SelectionPaint />
+        {children}
+      </body>
     </html>
   );
 }
