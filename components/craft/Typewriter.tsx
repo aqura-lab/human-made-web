@@ -16,20 +16,21 @@ export function Typewriter({ className }: { className?: string }) {
 
     let idx = 0;
     let timer: ReturnType<typeof setTimeout>;
-    setText(FRAMES[0]);
 
+    // All setState happens inside timer callbacks (never synchronously in the
+    // effect body), so the chain recurses cleanly without cascading renders.
     const step = () => {
+      setText(FRAMES[idx]);
       if (idx >= FRAMES.length - 1) return;
       const cur = FRAMES[idx];
       const next = FRAMES[idx + 1];
-      idx += 1;
-      setText(next);
       // Pause at the empty pivot; backspace fast; type at a steady clip.
       const delay = next === "" ? 450 : next.length < cur.length ? 55 : 115;
+      idx += 1;
       timer = setTimeout(step, delay);
     };
 
-    timer = setTimeout(step, 300);
+    timer = setTimeout(step, 120);
     return () => clearTimeout(timer);
   }, []);
 
