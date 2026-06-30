@@ -1,5 +1,6 @@
 import { SiteHeader, SiteFooter } from "@/components/Chrome";
 import { SignupForm } from "@/components/landing/SignupForm";
+import { Typewriter } from "@/components/craft/Typewriter";
 
 export default async function LandingPage({
   searchParams,
@@ -16,11 +17,13 @@ export default async function LandingPage({
           <div className="hero-grid">
             <div>
               <p className="kicker">Authorship, certified by process</p>
-              <h1>Prove how your work was written.</h1>
+              <h1 className="hero-display">
+                <Typewriter />
+              </h1>
               <p className="lede">
-                A privacy-preserving authorship certificate for writers. Capture the process behind a
-                piece as you write it, then hand skeptics a certificate they can verify themselves —
-                without ever exposing your drafts.
+                Not detected — demonstrated. A privacy-preserving authorship certificate for
+                writers: capture the process behind a piece as you write it, then hand skeptics a
+                certificate they can verify themselves, without ever exposing your drafts.
               </p>
               <p className="muted small">
                 Built for journalists first. Your raw text stays on your device. This is not an AI
