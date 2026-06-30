@@ -1,23 +1,17 @@
 import type { Metadata } from "next";
-import { Playfair_Display, JetBrains_Mono, Newsreader } from "next/font/google";
+import { Anton, Courier_Prime } from "next/font/google";
 import "./globals.css";
 
-const display = Playfair_Display({
+const display = Anton({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["500", "700"],
+  weight: "400",
 });
 
-const mono = JetBrains_Mono({
-  variable: "--font-mono",
+const typewriter = Courier_Prime({
+  variable: "--font-type",
   subsets: ["latin"],
-  weight: ["400", "500"],
-});
-
-const body = Newsreader({
-  variable: "--font-body",
-  subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
@@ -28,7 +22,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${display.variable} ${mono.variable} ${body.variable}`}>
+    <html lang="en" className={`${display.variable} ${typewriter.variable}`}>
       <body>{children}</body>
     </html>
   );
