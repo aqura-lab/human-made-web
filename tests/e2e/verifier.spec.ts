@@ -11,7 +11,10 @@ const registered = readFileSync(
 test("the dashboard verifier validates a genuine certificate", async ({ page }) => {
   await signUpAndVerify(page, uniqueEmail());
 
-  await page.getByLabel("Certificate").fill(registered);
+  // Exact match: the dashboard now also shows the badge-embed field and download
+  // links whose accessible names contain "certificate", so a substring match is
+  // ambiguous. The verifier's textarea is named exactly "Certificate".
+  await page.getByLabel("Certificate", { exact: true }).fill(registered);
   await page.getByLabel(/published text to match/i).fill("hello world");
   await page.getByRole("button", { name: /verify certificate/i }).click();
 

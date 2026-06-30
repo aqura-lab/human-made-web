@@ -98,10 +98,13 @@ function FoundCertificate({
       </p>
 
       <div className="panel">
-        <p>
-          <span className={`badge ${sig.ok ? "ok" : "bad"}`}>
+        <p style={{ marginBottom: 12 }}>
+          <span className={`stamp ${sig.ok ? "ok" : "bad"}`}>
+            <span aria-hidden="true">{sig.ok ? "✓" : "✕"}</span>
             {sig.ok ? "Signature valid" : "Not valid"}
-          </span>{" "}
+          </span>
+        </p>
+        <p>
           <span className={`badge ${reg.state === "registered" ? "ok" : "warn"}`}>
             {reg.state === "registered"
               ? "Registered"
