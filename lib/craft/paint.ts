@@ -6,11 +6,14 @@ export const TRAIL_INKS = [
   "#1C4FD6", "#29A3E0", "#FF7A18", "#FFD21E",
 ] as const;
 
-// White text sits on the selection background, so selection rotates only the
-// inks that meet AA against white. The light inks (yellow/orange/sky) are
-// trail-only.
+// Selection paints WHITE text (var(--paper)) on the highlight, so each ink must
+// clear WCAG AA (>=4.5:1) against near-white. The bright trail reds/pinks/greens
+// don't, so selection uses darker variants of the same marker hues (purple and
+// blue are already dark enough and are reused verbatim). The light trail inks
+// (yellow/orange/sky) are never used for selection.
+// Contrast vs #FAF8F1: dark-red 5.5, purple 6.6, dark-pink 6.2, dark-green 6.3, blue 6.3.
 export const SELECTION_INKS = [
-  "#E23B2E", "#7B2FBE", "#FF5FA2", "#1EA83C", "#1C4FD6",
+  "#B91C1C", "#7B2FBE", "#BE185D", "#166534", "#1C4FD6",
 ] as const;
 
 export type Medium = "pencil" | "watercolour" | "oil";

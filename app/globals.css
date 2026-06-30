@@ -64,6 +64,8 @@ h1, h2, h3 {
 
 .display { font-family: var(--font-display), Impact, sans-serif; text-transform: uppercase; line-height: 0.9; letter-spacing: 0.01em; }
 
+.mono { font-family: var(--font-type), "Courier New", monospace; }
+
 .kicker {
   font-family: var(--font-type), monospace;
   text-transform: uppercase;

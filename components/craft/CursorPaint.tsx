@@ -49,7 +49,8 @@ export function CursorPaint() {
     };
 
     const frame = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Clear in CSS pixels; the active dpr transform maps this to the full canvas.
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
       for (let k = 1; k < pts.length; k++) {
         const a = pts[k - 1];
         const b = pts[k];
