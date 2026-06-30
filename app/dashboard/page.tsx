@@ -6,10 +6,12 @@ import { ReferralCard } from "@/components/dashboard/ReferralCard";
 import { CertificateVerifier } from "@/components/dashboard/CertificateVerifier";
 import { FeedbackForm } from "@/components/dashboard/FeedbackForm";
 import { DownloadCard } from "@/components/dashboard/DownloadCard";
+import { BadgeEmbed } from "@/components/dashboard/BadgeEmbed";
 import { LoomEmbed } from "@/components/dashboard/LoomEmbed";
 import { getDownloadStateForUser } from "@/lib/release/store";
 import { getSetting } from "@/lib/settings/store";
 import { loomEmbedUrl, LOOM_SETTING_KEY } from "@/lib/settings/loom";
+import { appUrl } from "@/lib/auth/magic";
 
 export default async function DashboardPage() {
   const user = await requireUser();
@@ -70,6 +72,8 @@ export default async function DashboardPage() {
           </div>
 
           <DownloadCard state={download} />
+
+          <BadgeEmbed baseUrl={appUrl()} />
         </div>
       </main>
       <SiteFooter />
