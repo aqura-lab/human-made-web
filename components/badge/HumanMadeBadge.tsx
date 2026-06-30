@@ -9,18 +9,24 @@ import Link from "next/link";
 type Theme = "light" | "dark";
 
 const PALETTES: Record<Theme, { bg: string; border: string; ink: string; faint: string; accent: string }> = {
-  light: { bg: "#f3efe6", border: "#d7cfbe", ink: "#1b1714", faint: "#534b42", accent: "#ab2b1e" },
-  dark: { bg: "#1b1714", border: "#3a332c", ink: "#f3efe6", faint: "#c8bfb0", accent: "#e0594a" },
+  light: { bg: "#FAF8F1", border: "#E2DACB", ink: "#16130F", faint: "#4A433B", accent: "#E23B2E" },
+  dark: { bg: "#16130F", border: "#2E2820", ink: "#FAF8F1", faint: "#C8BFB0", accent: "#FF5FA2" },
 };
 
 const FONT = 'ui-monospace, "SFMono-Regular", "Courier New", monospace';
 
-function Nib({ accent, bg }: { accent: string; bg: string }) {
+// A tiny hand-drawn marker rainbow — concentric solid-colour arcs.
+function Rainbow() {
+  const arcs: [string, number][] = [
+    ["#7B2FBE", 10], ["#E23B2E", 8.2], ["#FF5FA2", 6.4], ["#1EA83C", 4.6], ["#1C4FD6", 2.8],
+  ];
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" style={{ flex: "0 0 auto" }}>
-      <path d="M12 2 C15 2 18 6 18 12 L12 22 L6 12 C6 6 9 2 12 2 Z" fill={accent} />
-      <line x1="12" y1="9" x2="12" y2="20" stroke={bg} strokeWidth="1.4" strokeLinecap="round" opacity="0.85" />
-      <circle cx="12" cy="11" r="1.6" fill={bg} />
+      <g fill="none" strokeWidth="1.7" strokeLinecap="round">
+        {arcs.map(([c, r]) => (
+          <path key={c} d={`M${12 - r} 16 A ${r} ${r} 0 0 1 ${12 + r} 16`} stroke={c} />
+        ))}
+      </g>
     </svg>
   );
 }
@@ -52,7 +58,7 @@ export function HumanMadeBadge({
         lineHeight: 1.15,
       }}
     >
-      <Nib accent={p.accent} bg={p.bg} />
+      <Rainbow />
       <span style={{ display: "flex", flexDirection: "column" }}>
         <span style={{ fontSize: 13, fontWeight: 700, color: p.ink, letterSpacing: "0.02em" }}>
           Human Made

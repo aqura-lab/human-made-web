@@ -10,7 +10,14 @@ export default defineConfig({
   },
   datasource: {
     // Migrations use a direct (non-pooled) connection in prod; runtime uses the
-    // pooled DATABASE_URL via the driver adapter in lib/db.ts.
-    url: process.env["DIRECT_URL"] ?? process.env["DATABASE_URL"],
+    // pooled DATABASE_URL via the driver adapter in lib/db.ts. We accept the
+    // Vercel/Neon integration's injected names directly (POSTGRES_URL_NON_POOLING /
+    // DATABASE_URL_UNPOOLED) so no manual DIRECT_URL copy is needed; an explicit
+    // DIRECT_URL still wins, and the pooled URL is the last resort.
+    url:
+      process.env["DIRECT_URL"] ??
+      process.env["POSTGRES_URL_NON_POOLING"] ??
+      process.env["DATABASE_URL_UNPOOLED"] ??
+      process.env["DATABASE_URL"],
   },
 });

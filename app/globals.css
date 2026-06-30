@@ -1,78 +1,78 @@
 @import "tailwindcss";
 
 /* ─────────────────────────────────────────────────────────────
-   Human Made — editorial / analog-typewriter aesthetic.
-   Warm paper, ink, a single editorial-red accent. Restrained.
+   Human Made — "Living Craft". Ink on warm paper; the eight marker
+   inks of the rainbow logo are the craft layer. Big bold Anton
+   display + Courier Prime typewriter body.
    ───────────────────────────────────────────────────────────── */
 
 :root {
-  --paper: #f3efe6;
-  --paper-2: #ece6d8;
-  --panel: #fbf9f4;
-  --ink: #1b1714;
-  --ink-soft: #534b42;
+  --mk-purple: #7b2fbe;
+  --mk-red: #e23b2e;
+  --mk-pink: #ff5fa2;
+  --mk-green: #1ea83c;
+  --mk-blue: #1c4fd6;
+  --mk-sky: #29a3e0;
+  --mk-orange: #ff7a18;
+  --mk-yellow: #ffd21e;
+
+  --paper: #faf8f1;
+  --paper-2: #f1ecdf;
+  --panel: #ffffff;
+  --ink: #16130f;
+  --ink-soft: #4a433b;
   --ink-faint: #8a8073;
-  --rule: #d7cfbe;
-  --accent: #ab2b1e;
-  --accent-ink: #7c1f16;
-  --ok: #2f6f4f;
-  --warn: #9a6a17;
-  --bad: #ab2b1e;
+  --rule: #e2dacb;
+
+  --ok: var(--mk-green);
+  --warn: var(--mk-orange);
+  --bad: var(--mk-red);
+
+  /* Rotated live by SelectionPaint; default is the Pen-Name red moment. */
+  --paint-selection: var(--mk-red);
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
-html,
-body {
-  padding: 0;
-  margin: 0;
-  min-height: 100%;
-}
+html, body { padding: 0; margin: 0; min-height: 100%; }
 
 body {
   background-color: var(--paper);
   background-image:
-    radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.5), transparent 40%),
-    radial-gradient(circle at 85% 0%, rgba(171, 43, 30, 0.04), transparent 35%),
-    repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(27, 23, 20, 0.018) 28px);
+    radial-gradient(circle at 18% 8%, rgba(255, 255, 255, 0.7), transparent 42%),
+    repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(22, 19, 15, 0.014) 28px);
   color: var(--ink);
-  font-family: var(--font-body), Georgia, "Times New Roman", serif;
-  font-size: 18px;
+  font-family: var(--font-type), "Courier New", ui-monospace, monospace;
+  font-size: 17px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
-a {
-  color: var(--accent-ink);
-  text-underline-offset: 3px;
-}
+::selection { background: var(--paint-selection); color: var(--paper); }
 
-h1,
-h2,
-h3 {
-  font-family: var(--font-display), Georgia, serif;
-  line-height: 1.1;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+a { color: var(--ink); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; text-decoration-color: var(--mk-blue); }
+a:hover { text-decoration-color: var(--mk-pink); }
+
+h1, h2, h3 {
+  font-family: var(--font-display), Impact, sans-serif;
+  line-height: 0.95;
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
   margin: 0 0 0.4em;
 }
 
-.mono,
-label,
-.kicker,
-.btn,
-.badge,
-.tier {
-  font-family: var(--font-mono), ui-monospace, monospace;
-}
+.display { font-family: var(--font-display), Impact, sans-serif; text-transform: uppercase; line-height: 0.9; letter-spacing: 0.01em; }
+
+.mono { font-family: var(--font-type), "Courier New", monospace; }
 
 .kicker {
+  font-family: var(--font-type), monospace;
   text-transform: uppercase;
   letter-spacing: 0.22em;
   font-size: 12px;
-  color: var(--accent-ink);
+  font-weight: 700;
+  color: var(--mk-red);
 }
 
 .muted {
@@ -103,19 +103,19 @@ label,
   padding-bottom: 20px;
 }
 .brand {
-  font-family: var(--font-display), serif;
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-family: var(--font-display);
+  font-size: 24px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
   color: var(--ink);
   text-decoration: none;
 }
 .brand .dot {
-  color: var(--accent);
+  color: var(--mk-red);
 }
 .nav a {
   margin-left: 22px;
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-type), monospace;
   font-size: 13px;
   text-decoration: none;
   color: var(--ink-soft);
@@ -130,22 +130,39 @@ label,
   padding: 28px 0;
   color: var(--ink-faint);
   font-size: 13px;
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-type), monospace;
 }
 
 /* Hero --------------------------------------------------------- */
 .hero {
   padding: 72px 0 28px;
 }
-.hero h1 {
-  font-size: clamp(40px, 7vw, 76px);
-  max-width: 12ch;
+.hero-display {
+  font-size: clamp(56px, 12vw, 168px);
+  max-width: 14ch;
 }
 .hero .lede {
-  font-size: 21px;
-  max-width: 46ch;
+  font-size: 19px;
+  max-width: 52ch;
   color: var(--ink-soft);
 }
+.caret {
+  display: inline-block;
+  width: 0.08em;
+  min-width: 3px;
+  height: 0.92em;
+  margin-left: 0.06em;
+  background: var(--mk-red);
+  vertical-align: -0.06em;
+  animation: caret-blink 1s steps(1) infinite;
+}
+@keyframes caret-blink {
+  50% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .caret { animation: none; }
+}
+
 .hero-grid {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
@@ -169,10 +186,10 @@ label,
 /* Panels / cards ---------------------------------------------- */
 .panel {
   background: var(--panel);
-  border: 1px solid var(--rule);
-  border-radius: 4px;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
   padding: 24px;
-  box-shadow: 0 1px 0 rgba(27, 23, 20, 0.04);
+  box-shadow: 4px 4px 0 rgba(22, 19, 15, 0.12);
 }
 .card-grid {
   display: grid;
@@ -188,10 +205,13 @@ label,
   font-size: 19px;
 }
 .card .num {
-  font-family: var(--font-mono), monospace;
-  color: var(--accent);
+  font-family: var(--font-type);
+  font-weight: 700;
   font-size: 13px;
 }
+.card-grid > .card:nth-child(1) .num { color: var(--mk-red); }
+.card-grid > .card:nth-child(2) .num { color: var(--mk-blue); }
+.card-grid > .card:nth-child(3) .num { color: var(--mk-green); }
 
 /* Forms -------------------------------------------------------- */
 .field {
@@ -201,6 +221,7 @@ label,
   gap: 6px;
 }
 label {
+  font-family: var(--font-type), monospace;
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -210,7 +231,7 @@ input[type="text"],
 input[type="email"],
 input:not([type]),
 textarea {
-  font-family: var(--font-body), Georgia, serif;
+  font-family: var(--font-type), "Courier New", monospace;
   font-size: 17px;
   color: var(--ink);
   background: #fffefb;
@@ -221,9 +242,9 @@ textarea {
 }
 input:focus,
 textarea:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: 0;
-  border-color: var(--accent);
+  outline: 3px solid var(--mk-blue);
+  outline-offset: 1px;
+  border-color: var(--ink);
 }
 .consent {
   border: 0;
@@ -243,11 +264,11 @@ textarea:focus {
   letter-spacing: 0;
   font-size: 14px;
   color: var(--ink-soft);
-  font-family: var(--font-body), serif;
+  font-family: var(--font-type), monospace;
 }
 .consent input {
   margin-top: 3px;
-  accent-color: var(--accent);
+  accent-color: var(--mk-red);
   width: 16px;
   height: 16px;
 }
@@ -257,17 +278,19 @@ textarea:focus {
   font-size: 14px;
   letter-spacing: 0.04em;
   padding: 11px 18px;
-  border-radius: 3px;
-  border: 1px solid var(--ink);
+  border-radius: 6px;
+  border: 2px solid var(--ink);
   background: transparent;
   color: var(--ink);
   cursor: pointer;
   text-decoration: none;
   display: inline-block;
+  font-weight: 700;
+  box-shadow: 3px 3px 0 var(--ink);
 }
 .btn.primary {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--mk-red);
+  border-color: var(--ink);
   color: #fff;
 }
 .btn.primary:disabled {
@@ -275,9 +298,15 @@ textarea:focus {
   border-color: var(--rule);
   color: var(--ink-faint);
   cursor: not-allowed;
+  box-shadow: none;
 }
 .btn:hover:not(:disabled) {
-  transform: translateY(-1px);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.btn:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--ink);
 }
 .btn.block {
   width: 100%;
@@ -312,7 +341,7 @@ textarea:focus {
   font-size: 14px;
 }
 .confirm-mark {
-  color: var(--accent);
+  color: var(--mk-red);
   font-size: 28px;
   margin: 0 0 8px;
 }
@@ -332,9 +361,9 @@ textarea:focus {
   grid-column: 1 / -1;
 }
 .bignum {
-  font-family: var(--font-display), serif;
-  font-size: 52px;
-  color: var(--accent-ink);
+  font-family: var(--font-display);
+  font-size: 64px;
+  color: var(--mk-red);
   line-height: 1;
 }
 .progress {
@@ -347,10 +376,10 @@ textarea:focus {
 .progress > span {
   display: block;
   height: 100%;
-  background: var(--accent);
+  background: linear-gradient(90deg, var(--mk-purple), var(--mk-red), var(--mk-pink), var(--mk-green), var(--mk-blue), var(--mk-sky), var(--mk-orange), var(--mk-yellow));
 }
 .code-pill {
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-type), monospace;
   background: #fffefb;
   border: 1px dashed var(--rule);
   padding: 8px 10px;
@@ -384,9 +413,37 @@ table.users td {
   border-bottom: 1px solid var(--rule);
 }
 table.users th {
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-type), monospace;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--ink-soft);
+}
+
+/* Status stamps ------------------------------------------------ */
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 22px;
+  padding: 6px 14px;
+  border: 3px solid currentColor;
+  border-radius: 8px;
+  transform: rotate(-3deg);
+}
+.stamp.ok { color: var(--ok); }
+.stamp.bad { color: var(--bad); }
+
+/* Trail canvas ------------------------------------------------- */
+.cursor-paint {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 60;
+  mix-blend-mode: multiply;
 }

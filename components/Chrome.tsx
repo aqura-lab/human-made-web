@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { RainbowMark } from "@/components/craft/RainbowMark";
 
 export function SiteHeader({ right }: { right?: React.ReactNode }) {
   return (
     <header className="site-header">
       <div className="wrap">
         <Link href="/" className="brand">
+          <RainbowMark />
           Human Made<span className="dot">.</span>
         </Link>
         <nav className="nav">{right ?? <Link href="/login">Sign in</Link>}</nav>

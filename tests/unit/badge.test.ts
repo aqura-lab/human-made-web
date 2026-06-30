@@ -33,8 +33,8 @@ describe("renderBadgeSvg", () => {
   });
 
   it("uses a darker background for the dark theme", () => {
-    expect(renderBadgeSvg("dark")).toContain("#1b1714");
-    expect(renderBadgeSvg("light")).toContain("#f3efe6");
+    expect(renderBadgeSvg("dark")).toContain("#16130F");
+    expect(renderBadgeSvg("light")).toContain("#FAF8F1");
   });
 });
 
@@ -60,7 +60,7 @@ describe("GET /api/badge/[id]", () => {
     const res = await GET(new Request("https://x/api/badge/" + VALID_ID + "?theme=dark"), {
       params: Promise.resolve({ id: VALID_ID }),
     });
-    expect(await res.text()).toContain("#1b1714");
+    expect(await res.text()).toContain("#16130F");
   });
 
   it("rejects a malformed id with 400 (no broken image, no injection)", async () => {
