@@ -30,7 +30,12 @@ export function ReleaseManager({ current }: { current: { version: string; fileNa
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ version, fileName: file.name, blobUrl: blob.url, sizeBytes: file.size, notes }),
       });
-      setStatus(res.ok ? `Published v${version}` : "Failed to save release");
+      if (res.ok) {
+        setStatus(`Published v${version}`);
+      } else {
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        setStatus(data.error ?? "Failed to save release");
+      }
     } catch (err) {
       setStatus(`Upload failed: ${(err as Error).message}`);
     } finally {
