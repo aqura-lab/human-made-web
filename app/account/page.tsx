@@ -2,6 +2,7 @@ import { requireUser, isAdmin } from "@/lib/auth/guards";
 import { AuthedHeader } from "@/components/dashboard/AuthedHeader";
 import { SiteFooter } from "@/components/Chrome";
 import { EditProfile, DeleteAccount } from "@/components/account/AccountControls";
+import { SetPasswordForm } from "@/components/account/SetPasswordForm";
 
 export const metadata = { title: "My Account — Human Made" };
 
@@ -18,6 +19,16 @@ export default async function AccountPage() {
         <div className="panel" style={{ marginTop: 16 }}>
           <h3>Edit your details</h3>
           <EditProfile name={user.name} reason={user.reason ?? ""} />
+        </div>
+
+        <div className="panel" style={{ marginTop: 16 }}>
+          <h3>{user.passwordHash ? "Change your password" : "Set a password"}</h3>
+          <p className="muted small">
+            {user.passwordHash
+              ? "Update the password you use to log in."
+              : "Set a password to log in instantly, without waiting for an email link."}
+          </p>
+          <SetPasswordForm hasPassword={user.passwordHash !== null} />
         </div>
 
         <div className="panel" style={{ marginTop: 16 }}>

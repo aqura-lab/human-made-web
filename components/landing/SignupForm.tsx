@@ -8,6 +8,7 @@ export function SignupForm({ referralCode }: { referralCode?: string }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [reason, setReason] = useState("");
+  const [password, setPassword] = useState("");
   const [gdpr, setGdpr] = useState(false);
   const [terms, setTerms] = useState(false);
   const [privacy, setPrivacy] = useState(false);
@@ -33,6 +34,7 @@ export function SignupForm({ referralCode }: { referralCode?: string }) {
           consentTerms: terms,
           consentPrivacy: privacy,
           ref: referralCode,
+          ...(password ? { password } : {}),
         }),
       });
       if (!res.ok) throw new Error("failed");
@@ -67,6 +69,18 @@ export function SignupForm({ referralCode }: { referralCode?: string }) {
       <div className="field">
         <label htmlFor="reason">Tell us why you want early access</label>
         <textarea id="reason" rows={3} value={reason} onChange={(e) => setReason(e.target.value)} />
+      </div>
+      <div className="field">
+        <label htmlFor="password">Set a password (optional)</label>
+        <input
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          autoComplete="new-password"
+          minLength={10}
+          placeholder="At least 10 characters — for faster login later"
+        />
       </div>
 
       <fieldset className="consent">

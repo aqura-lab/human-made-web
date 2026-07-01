@@ -16,6 +16,10 @@ describe("buildSoftDelete", () => {
     expect(update.reason).toBeNull();
     expect(update.consentIp).toBeNull();
     expect(update.consentUA).toBeNull();
+    // Credentials are personal data and must be scrubbed on delete.
+    expect(update.passwordHash).toBeNull();
+    expect(update.failedLoginCount).toBe(0);
+    expect(update.lockedUntil).toBeNull();
   });
 });
 

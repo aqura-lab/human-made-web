@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { signupSchema } from "@/lib/validation/schemas";
 import { generateReferralCode, isSelfReferral } from "@/lib/referral/attribution";
 import { issueMagicLink } from "@/lib/auth/magic";
+import { hashPassword } from "@/lib/auth/password";
 
 export const runtime = "nodejs";
 
@@ -24,7 +25,8 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
-  const { name, email, reason, ref } = parsed.data;
+  const { name, email, reason, ref, password } = parsed.data;
+  const passwordHash = password ? await hashPassword(password) : null;
 
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
   const ua = request.headers.get("user-agent");
@@ -52,6 +54,7 @@ export async function POST(request: Request) {
       reason,
       referralCode: generateReferralCode(),
       referredById,
+      passwordHash,
       consentGdpr: true,
       consentTerms: true,
       consentPrivacy: true,
