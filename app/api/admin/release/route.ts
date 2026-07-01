@@ -11,7 +11,7 @@ const Body = z.object({
   blobUrl: z.string().url(),
   sizeBytes: z.number().int().positive().optional(),
   sha256: z.string().trim().max(128).optional(),
-  notes: z.string().trim().max(2000).optional(),
+  notes: z.string().trim().max(20000).optional(),
 });
 
 export async function GET() {
@@ -26,7 +26,12 @@ export async function POST(request: Request) {
   let payload: unknown;
   try { payload = await request.json(); } catch { return NextResponse.json({ error: "Invalid request" }, { status: 400 }); }
   const parsed = Body.safeParse(payload);
-  if (!parsed.success) return NextResponse.json({ error: "Invalid release" }, { status: 400 });
+  if (!parsed.success) {
+    // Admin-only route — surface the specific validation failure to aid debugging.
+    const issue = parsed.error.issues[0];
+    const detail = issue ? `${issue.path.join(".")}: ${issue.message}` : "invalid payload";
+    return NextResponse.json({ error: `Invalid release (${detail})` }, { status: 400 });
+  }
   const release = await createRelease(parsed.data);
   return NextResponse.json({ ok: true, release });
 }
