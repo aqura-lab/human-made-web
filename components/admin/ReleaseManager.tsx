@@ -22,7 +22,7 @@ export function ReleaseManager({ current }: { current: { version: string; fileNa
       // keep the original name for display in the release record.
       const safeName = file.name.trim().replace(/\s+/g, "_").replace(/[^A-Za-z0-9._-]/g, "");
       const blob = await upload(safeName, file, {
-        access: "public",
+        access: "private",
         handleUploadUrl: "/api/admin/release/upload",
       });
       const res = await fetch("/api/admin/release", {
