@@ -1,5 +1,5 @@
 import { renderBadgeSvg, BADGE_WIDTH, BADGE_HEIGHT } from "@/lib/badge/svg";
-import { isValidCertificateId, getPublishedCertificate } from "@/lib/certificate/registry";
+import { isValidCertificateId } from "@/lib/certificate/id";
 import { GET } from "@/app/api/badge/[id]/route";
 
 const VALID_ID = "11111111-2222-3333-4444-555555555555";
@@ -35,13 +35,6 @@ describe("renderBadgeSvg", () => {
   it("uses a darker background for the dark theme", () => {
     expect(renderBadgeSvg("dark")).toContain("#16130F");
     expect(renderBadgeSvg("light")).toContain("#FAF8F1");
-  });
-});
-
-describe("getPublishedCertificate", () => {
-  it("returns null (no persistence layer yet) and never fabricates a cert", async () => {
-    expect(await getPublishedCertificate(VALID_ID)).toBeNull();
-    expect(await getPublishedCertificate("anything")).toBeNull();
   });
 });
 
