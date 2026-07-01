@@ -29,6 +29,11 @@ model User {
   // --- Email verification (second opt-in) ---
   emailVerified DateTime?
 
+  // --- Password auth (optional; magic link always works) ---
+  passwordHash     String? // scrypt-encoded; null = magic-link-only
+  failedLoginCount Int       @default(0)
+  lockedUntil      DateTime?
+
   // --- Queue / priority ---
   createdAt     DateTime @default(now()) // base FIFO ordering key
   priorityBoost Int      @default(0) // sum of bumps from converted referrals
