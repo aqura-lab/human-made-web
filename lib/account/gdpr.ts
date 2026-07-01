@@ -15,6 +15,9 @@ export type SoftDeleteUpdate = {
   reason: null;
   consentIp: null;
   consentUA: null;
+  passwordHash: null;
+  failedLoginCount: number;
+  lockedUntil: null;
 };
 
 export function buildSoftDelete(userId: string, now: Date): SoftDeleteUpdate {
@@ -25,6 +28,10 @@ export function buildSoftDelete(userId: string, now: Date): SoftDeleteUpdate {
     reason: null,
     consentIp: null,
     consentUA: null,
+    // Credentials are personal data — scrub the password and clear any lock.
+    passwordHash: null,
+    failedLoginCount: 0,
+    lockedUntil: null,
   };
 }
 

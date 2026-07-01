@@ -2,12 +2,40 @@
 
 import { useState } from "react";
 
-export function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [sent, setSent] = useState(false);
-  const [busy, setBusy] = useState(false);
+type Mode = "password" | "magic";
 
-  async function onSubmit(e: React.FormEvent) {
+export function LoginForm() {
+  const [mode, setMode] = useState<Mode>("password");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const [sent, setSent] = useState(false);
+
+  async function onPassword(e: React.FormEvent) {
+    e.preventDefault();
+    setBusy(true);
+    setError("");
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      if (res.ok) {
+        window.location.href = "/dashboard";
+        return;
+      }
+      const data = (await res.json().catch(() => ({}))) as { error?: string };
+      setError(data.error ?? "Invalid email or password.");
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function onMagic(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
     try {
@@ -32,8 +60,10 @@ export function LoginForm() {
     );
   }
 
+  const disabled = busy || email.trim() === "" || (mode === "password" && password === "");
+
   return (
-    <form className="panel" onSubmit={onSubmit}>
+    <form className="panel" onSubmit={mode === "password" ? onPassword : onMagic}>
       <div className="field">
         <label htmlFor="email">Email</label>
         <input
@@ -45,10 +75,54 @@ export function LoginForm() {
           required
         />
       </div>
-      <button className="btn primary block" type="submit" disabled={busy || email.trim() === ""}>
-        {busy ? "Sending…" : "Email me a sign-in link"}
+
+      {mode === "password" && (
+        <div className="field">
+          <label htmlFor="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
+            required
+          />
+        </div>
+      )}
+
+      {error && (
+        <p className="error" role="alert">
+          {error}
+        </p>
+      )}
+
+      <button className="btn primary block" type="submit" disabled={disabled}>
+        {busy
+          ? mode === "password"
+            ? "Signing in…"
+            : "Sending…"
+          : mode === "password"
+            ? "Log in"
+            : "Email me a sign-in link"}
       </button>
-      <p className="muted small">Passwordless — we email you a one-time link. No passwords to manage.</p>
+
+      <button
+        type="button"
+        className="btn block"
+        style={{ marginTop: 8 }}
+        onClick={() => {
+          setMode(mode === "password" ? "magic" : "password");
+          setError("");
+        }}
+      >
+        {mode === "password" ? "Email me a link instead" : "Use a password instead"}
+      </button>
+
+      <p className="muted small" style={{ marginTop: 10 }}>
+        {mode === "password"
+          ? "Log in with your password, or switch to a one-time email link."
+          : "Passwordless — we email you a one-time link. No password needed."}
+      </p>
     </form>
   );
 }

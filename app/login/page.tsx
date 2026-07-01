@@ -17,7 +17,8 @@ export default async function LoginPage({
           <p className="error">That link has expired or was already used. Request a new one below.</p>
         )}
         <p className="muted" style={{ marginBottom: 20 }}>
-          Enter the email you signed up with and we&apos;ll send you a fresh sign-in link.
+          Log in with your email and password. No password yet? Email yourself a one-time link
+          instead, then set one from your account.
         </p>
         <LoginForm />
       </main>
