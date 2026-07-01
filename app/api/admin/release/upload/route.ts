@@ -15,6 +15,8 @@ export async function POST(request: Request): Promise<NextResponse> {
       onBeforeGenerateToken: async () => ({
         allowedContentTypes: ["application/x-apple-diskimage", "application/octet-stream"],
         maximumSizeInBytes: 500 * 1024 * 1024,
+        // A random suffix keeps pathnames unique and collision-free across releases.
+        addRandomSuffix: true,
       }),
       onUploadCompleted: async () => {},
     });

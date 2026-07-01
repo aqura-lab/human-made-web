@@ -17,7 +17,11 @@ export function ReleaseManager({ current }: { current: { version: string; fileNa
     setBusy(true);
     setStatus("Uploading…");
     try {
-      const blob = await upload(file.name, file, {
+      // Blob pathnames reject spaces and other unsafe characters (a raw filename
+      // like "Human Made 0.1.0 aarch64.dmg" 400s). Upload under a sanitized path;
+      // keep the original name for display in the release record.
+      const safeName = file.name.trim().replace(/\s+/g, "_").replace(/[^A-Za-z0-9._-]/g, "");
+      const blob = await upload(safeName, file, {
         access: "public",
         handleUploadUrl: "/api/admin/release/upload",
       });
