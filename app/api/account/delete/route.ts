@@ -20,6 +20,9 @@ export async function POST() {
     // Votes are personal data; soft-delete scrubs identity, so remove the user's
     // votes explicitly (FK cascade only fires on the hard purge cron).
     await tx.feedbackVote.deleteMany({ where: { userId: user.id } });
+    // Published certificates carry no PII and may be embedded on third-party
+    // articles — keep them public but detach from identity (mirrors feedback).
+    await tx.certificate.updateMany({ where: { userId: user.id }, data: { userId: null } });
     // Soft-delete: scrub identifying fields, tombstone email, mark deletedAt.
     await tx.user.update({ where: { id: user.id }, data: buildSoftDelete(user.id, now) });
     // Invalidate any outstanding magic links.

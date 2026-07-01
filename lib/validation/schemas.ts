@@ -41,6 +41,15 @@ export const requestLinkSchema = z.object({
   email: z.string().trim().toLowerCase().email().max(254),
 });
 
+export const publishCertificateSchema = z.object({
+  json: z.string().min(1).max(50_000),
+  articleUrl: z.string().trim().url().max(2000).optional(),
+});
+
+export const unpublishCertificateSchema = z.object({
+  id: z.string().trim().min(1).max(128),
+});
+
 export const updateAccountSchema = z.object({
   name: z.string().trim().min(1).max(120).optional(),
   reason: z.string().trim().max(2000).optional(),

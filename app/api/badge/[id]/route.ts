@@ -1,5 +1,5 @@
 import { renderBadgeSvg, type BadgeTheme } from "@/lib/badge/svg";
-import { isValidCertificateId } from "@/lib/certificate/registry";
+import { isValidCertificateId } from "@/lib/certificate/id";
 
 // Pure string rendering — no crypto, no DB. The badge is identical regardless
 // of whether the id resolves to a stored certificate (it reveals nothing about

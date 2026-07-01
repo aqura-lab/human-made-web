@@ -53,9 +53,10 @@ model User {
   // --- GDPR soft-delete ---
   deletedAt DateTime?
 
-  feedback    Feedback[]
-  votes       FeedbackVote[]
-  magicTokens MagicLinkToken[]
+  feedback     Feedback[]
+  votes        FeedbackVote[]
+  magicTokens  MagicLinkToken[]
+  certificates Certificate[]
 
   @@index([priorityBoost(sort: Desc), createdAt(sort: Asc)])
   @@index([referredById])
@@ -137,4 +138,18 @@ model Setting {
   key       String   @id
   value     String
   updatedAt DateTime @updatedAt
+}
+
+// A certificate a writer has chosen to publish behind a public /c/[id] badge link.
+// Stores ONLY the already-public signed JSON (no raw text/keystrokes). The stored
+// payload is a cache for display — every render re-verifies the signature.
+model Certificate {
+  id          String   @id // the certificate's own signed UUID = the public handle
+  signedJson  String // the already-public signed certificate JSON, stored verbatim
+  articleUrl  String?
+  userId      String? // publisher; nulled when they delete their account
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  publishedAt DateTime @default(now())
+
+  @@index([userId])
 }

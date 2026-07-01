@@ -6,11 +6,12 @@ import { ReferralCard } from "@/components/dashboard/ReferralCard";
 import { CertificateVerifier } from "@/components/dashboard/CertificateVerifier";
 import { FeedbackForm } from "@/components/dashboard/FeedbackForm";
 import { DownloadCard } from "@/components/dashboard/DownloadCard";
-import { BadgeEmbed } from "@/components/dashboard/BadgeEmbed";
+import { CertificatePublisher } from "@/components/dashboard/CertificatePublisher";
 import { LoomEmbed } from "@/components/dashboard/LoomEmbed";
 import { getDownloadStateForUser } from "@/lib/release/store";
 import { getSetting } from "@/lib/settings/store";
 import { loomEmbedUrl, LOOM_SETTING_KEY } from "@/lib/settings/loom";
+import { listUserCertificates } from "@/lib/certificate/store";
 import { appUrl } from "@/lib/auth/magic";
 
 export default async function DashboardPage() {
@@ -18,6 +19,10 @@ export default async function DashboardPage() {
   const data = await getDashboardData(user.id);
   const download = await getDownloadStateForUser(user.id);
   const loom = loomEmbedUrl(await getSetting(LOOM_SETTING_KEY));
+  const certificates = (await listUserCertificates(user.id)).map((c) => ({
+    id: c.id,
+    articleUrl: c.articleUrl,
+  }));
 
   return (
     <>
@@ -73,7 +78,7 @@ export default async function DashboardPage() {
 
           <DownloadCard state={download} />
 
-          <BadgeEmbed baseUrl={appUrl()} />
+          <CertificatePublisher baseUrl={appUrl()} certificates={certificates} />
         </div>
       </main>
       <SiteFooter />
