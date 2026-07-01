@@ -115,7 +115,7 @@ export function CertificateVerifier() {
       )}
 
       <p className="muted small" style={{ marginTop: 10 }}>
-        Verification runs offline against the certificate&apos;s signature — Human Made is not an AI
+        Verification runs offline against the certificate&apos;s signature. Human Made is not an AI
         detector.
       </p>
     </div>

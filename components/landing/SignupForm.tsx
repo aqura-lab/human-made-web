@@ -39,7 +39,7 @@ export function SignupForm({ referralCode }: { referralCode?: string }) {
       });
       if (!res.ok) throw new Error("failed");
       setStatus("done");
-      setMessage("Check your inbox — we sent a link to confirm your email.");
+      setMessage("You've got mail! We sent a link to confirm your email.");
     } catch {
       setStatus("error");
       setMessage("Something went wrong. Please try again.");
@@ -111,7 +111,7 @@ export function SignupForm({ referralCode }: { referralCode?: string }) {
         </p>
       )}
       <p className="muted small">
-        Your draft text never leaves your device. Human Made certifies how your work was written — it
+        Your draft text never leaves your device. Human Made certifies how your work was written and it
         is not an AI detector.
       </p>
     </form>

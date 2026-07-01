@@ -11,7 +11,7 @@ async function signUpWithPassword(page: import("@playwright/test").Page, email: 
   await page.getByLabel(/privacy/i).check();
   await page.getByLabel(/set a password/i).fill(password);
   await page.getByRole("button", { name: /request early access/i }).click();
-  await expect(page.getByText(/check your inbox/i)).toBeVisible();
+  await expect(page.getByText(/you've got mail/i)).toBeVisible();
 }
 
 test("sign up with a password, verify email, then log in with the password", async ({ page }) => {
