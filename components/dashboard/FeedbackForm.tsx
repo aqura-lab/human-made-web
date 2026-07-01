@@ -58,7 +58,7 @@ export function FeedbackForm() {
       </button>
       {done && (
         <p className="muted small" role="status" style={{ marginTop: 8 }}>
-          Thanks — we read every note.
+          Thanks! We read every note.
         </p>
       )}
     </form>

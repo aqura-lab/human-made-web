@@ -34,7 +34,7 @@ export function ReferralCard({
       <h3>Your referral link</h3>
       <p className="muted small">
         Each friend who joins and confirms their email moves <em>you</em> up the queue. Invite {goal}{" "}
-        and your first year is on us.
+        and your first year is on us, when we move out this testing phase.
       </p>
       <div style={{ display: "flex", gap: 8, margin: "10px 0" }}>
         <input className="code-pill" style={{ flex: 1 }} readOnly value={link} />
@@ -47,7 +47,7 @@ export function ReferralCard({
       </div>
       <p className="muted small" style={{ marginTop: 8 }}>
         {perkUnlocked ? (
-          <strong>✦ Unlocked — your first year is free.</strong>
+          <strong>✦ Unlocked! Your first year of Human Made will be free.</strong>
         ) : (
           <>
             {converted} of {goal} invited

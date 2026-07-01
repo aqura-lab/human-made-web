@@ -21,7 +21,7 @@ export async function signUp(
   await page.getByLabel(/terms/i).check();
   await page.getByLabel(/privacy/i).check();
   await page.getByRole("button", { name: /request early access/i }).click();
-  await expect(page.getByText(/check your inbox/i)).toBeVisible();
+  await expect(page.getByText(/you've got mail/i)).toBeVisible();
 }
 
 /** Fetch the dev magic link for an email and follow it to establish a session. */
